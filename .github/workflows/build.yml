@@ -16,7 +16,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y zip unzip python3-pip openjdk-17-jdk build-essential git
-          pip install --user buildozer
+          pip install --user buildozer cython
           echo 'export PATH=$PATH:~/.local/bin/' >> ~/.bashrc
 
       - name: Set environment variables
@@ -32,4 +32,5 @@ jobs:
         with:
           name: myapp-apk-${{ github.run_id }}
           path: bin/*.apk
+
 
