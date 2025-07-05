@@ -10,22 +10,26 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install -y zip unzip python3-pip openjdk-17-jdk
+          sudo apt install -y zip unzip python3-pip openjdk-17-jdk build-essential git
           pip install --user buildozer
           echo 'export PATH=$PATH:~/.local/bin/' >> ~/.bashrc
 
-      - name: Build APK
+      - name: Set environment variables
         run: |
           export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
+      - name: Build APK with Buildozer
+        run: |
           yes | ~/.local/bin/buildozer -v android debug
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v2
         with:
           name: myapp-apk
           path: bin/*.apk
+
