@@ -28,8 +28,7 @@ jobs:
           yes | ~/.local/bin/buildozer -v android debug
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: myapp-apk
           path: bin/*.apk
-
