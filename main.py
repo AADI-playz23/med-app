@@ -10,11 +10,9 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
-from kivy.config import Config
 
-# Enable fullscreen
-Config.set('graphics', 'fullscreen', 'auto')
-Window.fullscreen = 'auto'
+# Do NOT set fixed Window size on Android
+# Window.size = (400, 700)
 
 # 🔗 Data + Google API setup
 DATA_URL = "https://aadi-playz23.github.io/my-hosting/data.json"
@@ -57,14 +55,17 @@ def fetch_medicine_image_google(medicine_name, api_key, cx):
         if "items" in results and results["items"]:
             return results["items"][0].get("link", "")
         return ""
-    except Exception as e:
+    except Exception:
         return ""
 
 class MedicineFinder(BoxLayout):
     def __init__(self, **kwargs):
-        super().__init__(orientation='vertical', spacing=0, **kwargs)
+        super().__init__(orientation='vertical', spacing=0, size_hint=(1, 1), **kwargs)
+        self.size = Window.size
         self.data_loaded = False
         self.medicine_data = []
+
+        self.bind(size=self._force_layout_update)
 
         # Header
         header = BoxLayout(size_hint_y=None, height=60, padding=15, spacing=10)
@@ -75,7 +76,7 @@ class MedicineFinder(BoxLayout):
         header.bind(size=self._update_header, pos=self._update_header)
         self.add_widget(header)
 
-        # Input fields
+        # Input section
         input_section = BoxLayout(orientation='vertical', padding=15, spacing=10, size_hint_y=None)
         input_section.bind(minimum_height=input_section.setter('height'))
 
@@ -99,7 +100,7 @@ class MedicineFinder(BoxLayout):
         input_section.add_widget(self.search_button)
         self.add_widget(input_section)
 
-        # Image and Result Display
+        # Result UI
         self.image = AsyncImage(size_hint_y=None, height=180)
 
         self.result_label = Label(
@@ -124,7 +125,7 @@ class MedicineFinder(BoxLayout):
             self.bg_rect = Rectangle(size=self.result_container.size, pos=self.result_container.pos)
         self.result_container.bind(size=self._update_bg, pos=self._update_bg)
 
-        scroll = ScrollView()
+        scroll = ScrollView(size_hint=(1, 1))
         scroll.add_widget(self.result_container)
         self.add_widget(scroll)
 
@@ -135,6 +136,9 @@ class MedicineFinder(BoxLayout):
     def _update_bg(self, instance, value):
         self.bg_rect.size = instance.size
         self.bg_rect.pos = instance.pos
+
+    def _force_layout_update(self, *args):
+        self.do_layout()
 
     def create_input(self, hint):
         return TextInput(
