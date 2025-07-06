@@ -46,7 +46,7 @@ jobs:
       run: python3 -m buildozer android debug
 
     - name: 📤 Upload APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: medicine-finder-apk
         path: bin/*.apk
