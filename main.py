@@ -11,8 +11,6 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
 
-# Do NOT set fixed Window size on Android
-# Window.size = (400, 700)
 
 # 🔗 Data + Google API setup
 DATA_URL = "https://aadi-playz23.github.io/my-hosting/data.json"
