@@ -32,5 +32,3 @@ jobs:
         with:
           name: myapp-apk-${{ github.run_id }}
           path: bin/*.apk
-
-
