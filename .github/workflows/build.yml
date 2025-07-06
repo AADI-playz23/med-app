@@ -1,34 +1,52 @@
-name: Build APK
+name: Build Kivy APK
 
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: 🛎️ Checkout Repository
+      uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y zip unzip python3-pip openjdk-17-jdk build-essential git
-          pip install --user buildozer cython
-          echo 'export PATH=$PATH:~/.local/bin/' >> ~/.bashrc
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
 
-      - name: Set environment variables
-        run: |
-          export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+    - name: 🧰 Install system dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y \
+          build-essential \
+          ccache \
+          libncurses5 \
+          libstdc++6 \
+          zlib1g-dev \
+          libffi-dev \
+          libssl-dev \
+          libsqlite3-dev \
+          openjdk-17-jdk \
+          zip unzip git python3-pip
 
-      - name: Build APK with Buildozer
-        run: |
-          yes | ~/.local/bin/buildozer -v android debug
+    - name: 📦 Install Python packages
+      run: |
+        pip install --upgrade pip
+        pip install Cython==0.29.36
+        pip install buildozer
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4.4.0
-        with:
-          name: myapp-apk-${{ github.run_id }}
-          path: bin/*.apk
+    - name: 🌐 Test Internet
+      run: ping -c 3 google.com
+
+    - name: ⚙️ Build APK
+      run: python3 -m buildozer android debug
+
+    - name: 📤 Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: medicine-finder-apk
+        path: bin/*.apk
