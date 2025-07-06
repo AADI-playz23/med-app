@@ -1,19 +1,16 @@
 [app]
-title = MyApp
-package.name = myapp
-package.domain = org.aadi
-source.dir = .
-source.include_exts = py
-version = 0.1
-requirements = python3,kivy
-orientation = portrait
-fullscreen = 1
-osx.kivy_version = 1.11.1
 
-[buildozer]
+title = Medicine Finder
+package.name = medicinefinder
+package.domain = org.example
+source.include_exts = py,png,jpg,kv,json
+orientation = portrait
+fullscreen = 0
 log_level = 2
-warn_on_root = 1
+android.permissions = INTERNET
+requirements = python3,kivy,requests
 android.api = 33
-android.ndk = 23b
-android.arch = armeabi-v7a
-android.minapi = 21
+android.ndk = 25b
+android.accept_sdk_license = True
+android.build_cache = true
+android.strip_debug = False
