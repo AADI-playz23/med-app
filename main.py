@@ -1,4 +1,4 @@
-﻿import requests
+import requests
 import threading
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -10,8 +10,11 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.window import Window
 from kivy.graphics import Color, Rectangle
+from kivy.config import Config
 
-Window.size = (400, 700)
+# Enable fullscreen
+Config.set('graphics', 'fullscreen', 'auto')
+Window.fullscreen = 'auto'
 
 # 🔗 Data + Google API setup
 DATA_URL = "https://aadi-playz23.github.io/my-hosting/data.json"
@@ -63,6 +66,7 @@ class MedicineFinder(BoxLayout):
         self.data_loaded = False
         self.medicine_data = []
 
+        # Header
         header = BoxLayout(size_hint_y=None, height=60, padding=15, spacing=10)
         header.add_widget(Label(text="💊 Medicine Finder", font_size=20, bold=True, color=(1, 1, 1, 1)))
         with header.canvas.before:
@@ -71,6 +75,7 @@ class MedicineFinder(BoxLayout):
         header.bind(size=self._update_header, pos=self._update_header)
         self.add_widget(header)
 
+        # Input fields
         input_section = BoxLayout(orientation='vertical', padding=15, spacing=10, size_hint_y=None)
         input_section.bind(minimum_height=input_section.setter('height'))
 
@@ -94,6 +99,7 @@ class MedicineFinder(BoxLayout):
         input_section.add_widget(self.search_button)
         self.add_widget(input_section)
 
+        # Image and Result Display
         self.image = AsyncImage(size_hint_y=None, height=180)
 
         self.result_label = Label(
@@ -104,7 +110,7 @@ class MedicineFinder(BoxLayout):
             color=(1, 1, 1, 1),
             font_size=17,
             size_hint_y=None,
-            text_size=(360, None)
+            text_size=(Window.width - 40, None)
         )
         self.result_label.bind(texture_size=self._update_label_height)
 
